@@ -4,7 +4,7 @@ paths.dofile('model.lua')   -- Read in network model
 paths.dofile('train.lua')   -- Load up training/testing functions
 
 -- Set up data loader
-torch.setnumthreads(4)
+torch.setnumthreads(5)
 local Dataloader = paths.dofile('util/dataloader.lua')
 loader = Dataloader.create(opt, dataset, ref)
 
