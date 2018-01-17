@@ -1,0 +1,1 @@
+th main.lua -expID finetune -continue -LR 2.5e-4 -usePGPG -dataset bonn-cha -GPU 2 -snapshot 1 -loadModel mpii_base_15.t7  -nEpochs 20 -trainIters 14000 -iterSize 1 -trainBatch 4 -validIters 1225 -validBatch 2 -nValidImgs 2453

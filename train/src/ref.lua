@@ -29,7 +29,7 @@ if not dataset then
     dataset = Dataset()
 end
 
--- Global reference (may be updated in the task file below)
+-- Global reference (may be updated in the task file below)elf.accIdxs = {1,2
 if not ref then
     ref = {}
     ref.nOutChannels = dataset.nJoints
@@ -77,4 +77,32 @@ if not ref.alreadyChecked then
     printDims("Input is a ", ref.inputDim)
     printDims("Output is a ", ref.outputDim)
     ref.alreadyChecked = true
+end
+
+
+function cleanDPT(module)
+   local newDPT = nn.DataParallelTable(1)
+   cutorch.setDevice(opt.GPU)
+   newDPT:add(module:get(1), opt.GPU)
+   return newDPT
+end
+
+function makeDPT(model, nGPU)
+    if nGPU > 1 then
+        print('converting module to nn.DataParallelTable')
+        assert(nGPU <= cutorch.getDeviceCount(), 'number of GPUs less than nGPU specified')
+
+        local GPUs = torch.range(1, nGPU):totable()
+        local fastest, benchmark = cudnn.fastest, cudnn.benchmark
+        local dpt = nn.DataParallelTable(1, true, true)
+             :add(model, GPUs)
+             :threads(function()
+                 local cudnn = require 'cudnn'
+                 require 'nngraph'
+                 cudnn.fastest, cudnn.benchmark = fastest, benchmark
+             end)
+        dpt.gradInput = nil
+        model = dpt:cuda()
+    end
+    return model
 end

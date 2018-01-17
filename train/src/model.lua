@@ -1,6 +1,7 @@
 require 'cutorch'
 require 'cunn'
 require 'cudnn'
+require 'nccl'
 --- Load up network model or initialize from scratch
 paths.dofile('models/' .. opt.netType .. '.lua')
 
@@ -115,6 +116,14 @@ end
 -- Criterion (can be set in the opt.task file as well)
 if not criterion then
     criterion = nn[opt.crit .. 'Criterion']()
+end
+if opt.nGPU > 1 then
+    if torch.type(model) == 'nn.DataParallelTable' then
+        print('==> Loading Parallel model to CUDA')
+        model = makeDPT(model:get(1):float(), opt.nGPU)
+    else
+        model = makeDPT(model, opt.nGPU)
+    end
 end
 
 if opt.GPU ~= -1 then

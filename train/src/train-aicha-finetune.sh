@@ -1,0 +1,16 @@
+th main.lua\ 
+-expID finetune-PyraNet\ 
+-usePGPG\ 
+-nGPU 2\ 
+-continue\ 
+-LR 2.5e-4\ 
+-nEpochs 10\ 
+-dataset ai-cha\ 
+-GPU 1\ 
+-snapshot 1\ 
+-trainIters 63450\ 
+-iterSize 1\ 
+-trainBatch 6\ 
+-validIters 11732\ 
+-validBatch 6\ 
+-nValidImgs 70396

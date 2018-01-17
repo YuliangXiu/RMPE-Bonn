@@ -29,7 +29,13 @@ opt.lastEpoch = epoch - 1
 model:clearState()
 torch.save(paths.concat(opt.save,'options.t7'), opt)
 torch.save(paths.concat(opt.save,'optimState.t7'), optimState)
-torch.save(paths.concat(opt.save,'final_model.t7'), model)
+
+if torch.type(model) == 'nn.DataParallelTable' then
+    torch.save(paths.concat(opt.save,'final_model_para.t7'), cleanDPT(model))
+else
+    torch.save(paths.concat(opt.save,'final_model.t7'), model)
+end
+-- torch.save(paths.concat(opt.save,'final_model.t7'), model)
 
 -- Generate final predictions on validation set
 if opt.finalPredictions then

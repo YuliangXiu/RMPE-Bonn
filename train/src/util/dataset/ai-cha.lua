@@ -14,7 +14,7 @@ function Dataset:__init()
 
     local annot = {}
     local tags = {'imgname','part','bndbox'}
-    local a = hdf5.open('../data/'..opt.dataset..'/annot.h5','r')
+    local a = hdf5.open('../data/'..opt.dataset..'/train_valid_annot.h5','r')
     for _,tag in ipairs(tags) do annot[tag] = a:read(tag):all() end
     a:close()
     annot.part:add(1)
@@ -23,14 +23,14 @@ function Dataset:__init()
     if not opt.idxRef then
         opt.idxRef = {}
         -- Set up training/validation split
-        opt.idxRef.train = torch.randperm(annot.part:size(1)-370000)
-        opt.idxRef.valid = torch.range(annot.part:size(1)-370000,annot.part:size(1))
+        opt.idxRef.train = torch.randperm(annot.part:size(1)-70399)
+        opt.idxRef.valid = torch.range(annot.part:size(1)-70399,annot.part:size(1))
 
         torch.save(opt.save .. '/options.t7', opt)
     end
 
     self.annot = annot
-    self.nsamples = {train=opt.idxRef.train:numel(),
+    self.nsamples = {train=opt.idxRef.train:numel(),    
                      valid=opt.idxRef.valid:numel()}
 end
 

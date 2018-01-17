@@ -55,6 +55,7 @@ function Dataset:getPartInfo(idx)
 end
 
 function Dataset:getNormInfo(idx)
+    -- print(#self.annot.mu[idx])
     local mu = self.annot.mu[idx]:clone()
     local std = self.annot.std[idx]:clone()
 

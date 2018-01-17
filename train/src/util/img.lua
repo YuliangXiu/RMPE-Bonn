@@ -223,6 +223,12 @@ function cropBox(img, ul, br, rot, res)
     local oldY = torch.Tensor({math.max(1, ul[2]), math.min(br[2], ht+1) - 1})
     
     if newDim:size(1) > 2 then
+
+        -- print(#newImg, newDim[1],newY[1],newY[2],newX[1],newX[2])
+        -- print(#img, newDim[1],oldY[1],oldY[2],oldX[1],oldX[2])
+        -- newImg:sub(1,newDim[1],newY[1],newY[2],newX[1],newX[2])
+        -- img:sub(1,newDim[1],oldY[1],oldY[2],oldX[1],oldX[2])
+
         newImg:sub(1,newDim[1],newY[1],newY[2],newX[1],newX[2]):copy(img:sub(1,newDim[1],oldY[1],oldY[2],oldX[1],oldX[2]))
     else
         newImg:sub(newY[1],newY[2],newX[1],newX[2]):copy(img:sub(oldY[1],oldY[2],oldX[1],oldX[2]))
